@@ -104,32 +104,62 @@ def data_collector(name,path,userID):
     cv2.destroyAllWindows()
         
     
+    
+def intro():
+    title = """\n\n::::::::::   :::      ::::::::  ::::::::::      ::::::::::: :::::::::  
+:+:        :+: :+:   :+:    :+: :+:                 :+:     :+:    :+: 
++:+       +:+   +:+  +:+        +:+                 +:+     +:+    +:+ 
+:#::+::# +#++:++#++: +#+        +#++:++#            +#+     +#+    +:+ 
++#+      +#+     +#+ +#+        +#+                 +#+     +#+    +#+ 
+#+#      #+#     #+# #+#    #+# #+#                 #+#     #+#    #+# 
+###      ###     ###  ########  ##########      ########### #########  """
+    byline = """    ____             __________  _   __________  _______________________    __  __
+   / __ )__  ___    / ____/ __ \/ | / / ____/ / / / ____/ ____/_  __/   |  / / / /
+  / __  / / / (_)  / / __/ /_/ /  |/ / /   / /_/ / __/ / __/   / / / /| | / /_/ / 
+ / /_/ / /_/ /    / /_/ / _, _/ /|  / /___/ __  / /___/ /___  / / / ___ |/ __  /  
+/_____/\__, (_)   \____/_/ |_/_/ |_/\____/_/ /_/_____/_____/ /_/ /_/  |_/_/ /_/   
+      /____/                                                                      \n"""
+    
+    print(title)
+    print("-"*80)
+    print(byline)
+    print("-"*80)
+    
 if __name__ == "__main__":
 
-    ans = 0
-    print("""Options:
-        1) Detect
-        2) Add new user
-        3) Exit""")
-    ans = int(input("Choose: "))
+    intro()
+    ans = -1
 
     while (ans!=0):
         if ans == 1:
             detector()
             ans = 0
         elif ans == 2:
-            name = input("Name of subject: ")
+            name = input("\nName of subject: ")
             userID = input("User ID: ")
             path = "subject/" # path to images of subject
             if not os.path.exists(path):
                 os.makedirs(path)
             
             with open("face_to_id.txt","a") as file:
-                file.write(str(userID)+":"+str(name))
+                file.write("\n"+str(userID)+":"+str(name))
             
             data_collector(name,path,userID)
             IDs,faces = getImageWithID(name,path)
             recognize(IDs,faces)
             ans = 1
+        elif ans == 3:
+            print("\nCurrent users:")
+            print("ID:NAME")
+            with open("face_to_id.txt") as file:
+                for line in file:
+                    print("\t" + line)
+            ans = -1
+            
         else:
-            ans = input("Try again: ")
+            print("""\n\nOptions:
+                1) Detect
+                2) Add new user
+                3) List current users
+                0) Exit""")
+            ans = int(input("Choose: "))
